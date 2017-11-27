@@ -1,0 +1,22 @@
+{
+  "name": "lsproject",
+  "description": "Lost and found service for NYU ids",
+  "scripts": {
+  },
+  "env": {
+    "REDIS_URL": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+    "heroku-postgresql",
+    "heroku-redis"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
