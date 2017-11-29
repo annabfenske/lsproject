@@ -9,3 +9,4 @@ class User(models.Model):
     last_name = models.CharField("Last Name", max_length=250, blank=False, null=False)
     nyu_email = models.EmailField(max_length=254)
     id_lost = models.BooleanField(blank=False, null=False, default=False)
+    time_lost = models.DateTimeField("Time Lost")
