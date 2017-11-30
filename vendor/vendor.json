@@ -6,11 +6,5 @@
 		]
 	},
 	"ignore": "test",
-	"package": [
-		{
-			"path": "github.com/af2570/lsproject/cmd/going_going_gone",
-			"revision": ""
-		}
-	],
-	"rootPath": "github.com/af2570/lsproject"
+	"rootPath": "github.com/af2570/lsproject/cmd"
 }
