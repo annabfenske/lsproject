@@ -1,0 +1,9 @@
+{
+	"comment": "",
+	"heroku": {
+		"install": ["./..."]
+	},
+	"ignore": "test",
+	"package": [],
+	"rootPath": "personal/deployed/large-scale-project/cmd"
+}
