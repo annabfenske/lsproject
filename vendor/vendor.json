@@ -6,5 +6,5 @@
 		]
 	},
 	"ignore": "test",
-	"rootPath": "github.com/af2570/lsproject/cmd"
+	"rootPath": "github.com/af2570/lsproject"
 }
