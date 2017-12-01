@@ -17,4 +17,4 @@ def reportLost(request):
 
     args['form'] = form
     print('here - 2')
-    return render(request,'reportLost/index.html', {})
+    return render(request,'reportLost/index.html', args)
