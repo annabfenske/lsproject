@@ -2,19 +2,19 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
 from .models import User
 from .forms import UserForm
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.template import RequestContext
 
 def reportLost(request):
-    if request.POST:
+    if request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
             form.save()
-            return render('reportLost/index.html')
+        print('here - 1')
+        return render(request,'reportLost/index.html', {form : form})
     else:
         form = UserForm()
     args = {}
 
     args['form'] = form
-
-    return render_to_response('reportLost/index.html', args)
+    print('here - 2')
+    return render(request,'reportLost/index.html', {})
