@@ -1,8 +1,11 @@
 from django.shortcuts import render
-from django.http import JsonResponse
-from django.core.cache import cache
+from django.http import JsonResponse, HttpResponse
 from django_redis import get_redis_connection
+from django.core.cache import cache
+from .models import User
+from .forms import UserForm
 
+from datetime import datetime
 import time
 import uuid
 import json
@@ -47,8 +50,20 @@ def readUser(request, netID):
               'swipes': swipes}
     return render(request, 'swipe_history.html', context)
 
-def reportLost(request, netID):
-  return JsonResponse({"placeholder":True})
-
 def createUser(request):
   return JsonResponse({"placeholder":True})
+
+
+def reportLost(request):
+    print(User.objects.all())
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            ID = form.save(commit=False)
+            ID.time_lost = datetime.now()
+            ID.save()
+            cache.set(form.cleaned_data.get('net_id'), ID.time_lost)
+    form = UserForm()
+    args = {}
+    args['form'] = form
+    return render(request,'reportLost/index.html', args)

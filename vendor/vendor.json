@@ -1,0 +1,24 @@
+{
+	"comment": "",
+	"heroku": {
+		"install": [
+			"./..."
+		]
+	},
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "2UmMbNHc8FBr98mJFN1k8ISOIHk=",
+			"path": "github.com/garyburd/redigo/internal",
+			"revision": "b389d5392e340092642eec4e36754e0280ad1f8e",
+			"revisionTime": "2017-11-27T19:16:32Z"
+		},
+		{
+			"checksumSHA1": "YdFePCOhDZ/jM44yDKwRaOKJM0g=",
+			"path": "github.com/garyburd/redigo/redis",
+			"revision": "b389d5392e340092642eec4e36754e0280ad1f8e",
+			"revisionTime": "2017-11-27T19:16:32Z"
+		}
+	],
+	"rootPath": "github.com/af2570/lsproject"
+}

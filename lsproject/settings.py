@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import urllib
-import django_cache_url
 import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -60,7 +59,7 @@ ROOT_URLCONF = 'lsproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['../lostandfound/templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,8 +86,16 @@ DATABASES = {
     }
 }
 
+redis_url = urllib.parse.urlparse(os.environ.get('REDIS_URL'))
 CACHES = {
-    'default': django_cache_url.config()
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': '{0}:{1}'.format(redis_url.hostname, redis_url.port),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'PASSWORD': redis_url.password
+        }
+    }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
