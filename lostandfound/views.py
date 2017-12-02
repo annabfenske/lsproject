@@ -44,7 +44,6 @@ def swipe(request, netID):
 def readUser(request, netID):
     swipes = redis.lrange(':1:swipes_' + netID, -20, -1)
     swipes = map(json.loads, swipes)
-    print swipes
     context = {'headers': ['Time', 'Location'], 
               'keys': ['time', 'location'],
               'swipes': swipes}
