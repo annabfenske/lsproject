@@ -16,11 +16,6 @@ def index(request):
   return JsonResponse({'placeholder':True})
 
 def swipe(request, netID):
-
-    redis.rpush(':1:swipes_' + netID, json.dumps(swipe))
-
-    reportTime = cache.get('lost_' + netID)
-    
     return JsonResponse({'lost':True})
 
 def reportLost(request):
