@@ -59,7 +59,7 @@ ROOT_URLCONF = 'lsproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['../lostandfound/templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

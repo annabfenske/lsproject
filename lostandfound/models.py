@@ -1,11 +1,9 @@
 from django.db import models
-
-# Create your models here.
+from django.conf import settings
 
 class User(models.Model):
-    net_id = models.CharField("Net ID", max_length=10, blank=False, null=False, primary_key=True)
-    n_number = models.CharField("N#", max_length=10, blank=False, null=False)
-    first_name = models.CharField("First Name", max_length=250, blank=False, null=False)
-    last_name = models.CharField("Last Name", max_length=250, blank=False, null=False)
-    nyu_email = models.EmailField(max_length=254)
-    id_lost = models.BooleanField(blank=False, null=False, default=False)
+    net_id = models.CharField("Net ID", max_length=10, blank=False, primary_key=True)
+    time_lost = models.DateTimeField(auto_now_add=True, blank=False)
+
+    def __str__(self):
+        return 'time lost' + str(self.time_lost)
