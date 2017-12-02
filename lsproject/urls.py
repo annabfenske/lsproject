@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+# from lostandfound import urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^reportLost/', include('lostandfound.urls')),
+    url(r'^', include('lostandfound.urls'))
 ]
