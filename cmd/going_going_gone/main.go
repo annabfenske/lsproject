@@ -15,7 +15,7 @@ func main() {
         os.Exit(1)
     }
     defer redis.Close()
-    fmt.Println("$$$ successfully connected to redis: %s", os.Getenv("REDIS_URL"))
+    fmt.Println("$$$ successfully connected to redis:", os.Getenv("REDIS_URL"))
 
     postgres, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
     if err != nil {
@@ -23,7 +23,7 @@ func main() {
         os.Exit(1)
     }
     defer postgres.Close()
-    fmt.Println("$$$ successfully connected to postgres: %s", os.Getenv("DATABASE_URL"))
-    
+    fmt.Println("$$$ successfully connected to postgres:", os.Getenv("DATABASE_URL"))
+
     os.Exit(0)
 }
