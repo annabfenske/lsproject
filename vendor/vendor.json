@@ -1,0 +1,10 @@
+{
+	"comment": "",
+	"heroku": {
+		"install": [
+			"./..."
+		]
+	},
+	"ignore": "test",
+	"rootPath": "github.com/af2570/lsproject"
+}
