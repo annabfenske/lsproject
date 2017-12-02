@@ -4,15 +4,26 @@ import (
     "fmt"
     "os"
     redis "github.com/garyburd/redigo/redis"
+    _ "github.com/lib/pq"
+    "database/sql"
 )
 
 func main() {
-    cursor, err := redis.DialURL(os.Getenv("REDIS_URL"))
+    redis, err := redis.DialURL(os.Getenv("REDIS_URL"))
     if err != nil {
         fmt.Println("$$$ could not connect to redis")
         os.Exit(1)
     }
-    defer cursor.Close()
+    defer redis.Close()
     fmt.Println("$$$ successfully connected to redis: %s", os.Getenv("REDIS_URL"))
+
+    postgres, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+    if err != nil {
+        fmt.Println("$$$ could not connect to postgres")
+        os.Exit(1)
+    }
+    defer postgres.Close()
+    fmt.Println("$$$ successfully connected to postgres: %s", os.Getenv("DATABASE_URL"))
+    
     os.Exit(0)
 }
