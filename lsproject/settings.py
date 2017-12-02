@@ -87,6 +87,7 @@ DATABASES = {
 }
 
 redis_url = urllib.parse.urlparse(os.environ.get('REDIS_URL'))
+print(os.environ.get('REDIS_URL'))
 CACHES = {
     'default': {
         'BACKEND': 'redis_cache.RedisCache',
