@@ -8,13 +8,16 @@ import (
     "database/sql"
 )
 
+const ttl = 30 // 60 seconds. Change for production.
+
 func main() {
-    redis, err := redis.DialURL(os.Getenv("REDIS_URL"))
+    rConn, err := redis.DialURL(os.Getenv("REDIS_URL"))
     if err != nil {
         fmt.Println("$$$ could not connect to redis")
         os.Exit(1)
     }
-    defer redis.Close()
+    SetIDs(rConn, []string{"aks516", "idk152", "whodis", "newphone"}, ttl)
+    defer rConn.Close()
     fmt.Println("$$$ successfully connected to redis:", os.Getenv("REDIS_URL"))
 
     postgres, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))

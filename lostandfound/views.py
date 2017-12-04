@@ -18,7 +18,9 @@ def index(request):
   return JsonResponse({'placeholder':True})
 
 def swipe(request, netID):
-    return JsonResponse({'lost':True})
+    if cache.get(netID):
+        return JsonResponse({'lost':True})
+    return JsonResponse({'lost':False})
 
 def reportLost(request):
     if request.method == 'POST':
