@@ -1,7 +1,7 @@
 from django import forms
-from .models import User
+from .models import lostNYUID
 
 class UserForm(forms.ModelForm):
     class Meta:
-        model = User
+        model = lostNYUID
         fields = ['net_id']
