@@ -8,7 +8,7 @@ import (
     "database/sql"
 )
 
-const ttl = 30 // 60 seconds. Change for production.
+const ttl = 30 // 30 seconds. Change for production.
 
 func main() {
     rConn, err := redis.DialURL(os.Getenv("REDIS_URL"))
