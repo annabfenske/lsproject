@@ -8,7 +8,13 @@ import (
     "database/sql"
 )
 
-const ttl = 30 // 60 seconds. Change for production.
+const ttl = 30 // 30 seconds. Change for production.
+
+func getWriter(rConn redis.Conn, ttl float64) func(id string) {
+    return func(id string) {
+        SetID(rConn, id, ttl)
+    }
+}
 
 func main() {
     rConn, err := redis.DialURL(os.Getenv("REDIS_URL"))
@@ -16,7 +22,6 @@ func main() {
         fmt.Println("$$$ could not connect to redis")
         os.Exit(1)
     }
-    SetIDs(rConn, []string{"aks516", "idk152", "whodis", "newphone"}, ttl)
     defer rConn.Close()
     fmt.Println("$$$ successfully connected to redis:", os.Getenv("REDIS_URL"))
 
@@ -27,6 +32,10 @@ func main() {
     }
     defer postgres.Close()
     fmt.Println("$$$ successfully connected to postgres:", os.Getenv("DATABASE_URL"))
+
+    handler := getWriter(rConn, ttl)
+
+    LongPoll(postgres, handler)
 
     os.Exit(0)
 }
