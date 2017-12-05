@@ -14,9 +14,8 @@ func LongPoll(database *sql.DB, handler func(string)) {
     lastCheck := time.Now()
     for {
         queryStart := lastCheck.Add(time.Duration((-pollInterval * time.Second).Seconds()))
-        fmt.Println(queryStart.Format("2006-01-02 15:04:05-07"))
-        lastCheck = time.Now()
         timeLost := queryStart.Format("2006-01-02 15:04:05-07")
+        lastCheck = time.Now()
         rows, error := database.Query("SELECT net_id FROM lostandfound_lostnyuid WHERE time_lost>$1", timeLost)
         if error != nil {
           fmt.Println("$$$ could not select rows")
