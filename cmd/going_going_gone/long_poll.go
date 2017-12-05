@@ -1,35 +1,50 @@
 package main
 
 import (
+    "os"
+    "fmt"
+    "time"
     _ "github.com/lib/pq"
     "database/sql"
-    "time"
 )
 
-func LongPoll(database *sql.DB) {
-  for {
-        start := time.Now()
-        response, error := database.Query()
-        elapsed := time.Since(start)
+const pollInterval = 10
 
-        status := response.StatusCode
+func LongPoll(database *sql.DB, handler func(string)) {
+    lastCheck := time.Now()
+    for {
+        queryStart := lastCheck.Add(time.Duration((-pollInterval * time.Second).Seconds()))
+        fmt.Println(queryStart.Format("2006-01-02 15:04:05-07"))
+        lastCheck = time.Now()
+        timeLost := queryStart.Format("2006-01-02 15:04:05-07")
+        rows, error := database.Query("SELECT net_id FROM lostandfound_lostnyuid WHERE time_lost>$1", timeLost)
+        if error != nil {
+          fmt.Println("$$$ could not select rows")
+          fmt.Println(error)
+          os.Exit(1)
+        } 
 
-        if elapsed.Seconds() >= 30 || error != nil {
-            fmt.Println("took longer than 30 seconds")
-            fmt.Println(status)
-
-            status := -1
-            fmt.Fprintf(file, "%d, %d\n", time.Now().Unix(), status)
-        } else {
-            fmt.Println("took less than 30 seconds")
-            fmt.Println(status)
-
-            fmt.Fprintf(file, "%d, %d\n", time.Now().Unix(), status)
-
-            sleep := (30 * time.Second).Seconds() - elapsed.Seconds()
-            time.Sleep(time.Duration(sleep) * time.Second)
+        for rows.Next() {
+          var id string
+          err := rows.Scan(&id)
+          if err != nil {
+            fmt.Println("$$$ could not scan rows")
+          } else {
+            handler(id)
+          }
         }
 
-        defer response.Body.Close()
+        rows.Close()
+
+        elapsed := time.Since(lastCheck)
+
+        if elapsed.Seconds() >= pollInterval || error != nil {
+            fmt.Println("took longer than our interval")
+        } else {
+            fmt.Println("took less than our interval")
+
+            sleep := (pollInterval * time.Second).Seconds() - elapsed.Seconds()
+            time.Sleep(time.Duration(sleep) * time.Second)
+        }
     }
 }
