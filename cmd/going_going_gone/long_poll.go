@@ -29,6 +29,7 @@ func LongPoll(database *sql.DB, handler func(string)) {
           if err != nil {
             fmt.Println("$$$ could not scan rows")
           } else {
+            fmt.Println(id)
             handler(id)
           }
         }
