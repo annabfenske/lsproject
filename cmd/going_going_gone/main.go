@@ -10,39 +10,29 @@ import (
 
 const ttl = 30 // 30 seconds. Change for production.
 
-func getWriter(rConn *redis.Conn, ttl float64) func(id string) {
+func getWriter(rConn redis.Conn, ttl float64) func(id string) {
     return func(id string) {
         SetID(rConn, id, ttl)
     }
 }
 
-func getRefreshConnection(rConn *redis.Conn) func() {
+func getKeepAlive(rConn redis.Conn) func() {
     return func() {
-        if rConn != nil {
-            _, err := (*rConn).Do("SET", "CHECK")
-            if err != nil {
-                *rConn, err = redis.DialURL(os.Getenv("REDIS_URL"))
-            }
-        } else {
-            connection, err := redis.DialURL(os.Getenv("REDIS_URL"))
-            if err != nil {
-                fmt.Println("$$$ could not connect to redis")
-                fmt.Println(err)
-                os.Exit(1)
-            }
-            *rConn = connection
+        _, err := rConn.Do("SET", "A", 1) // Send something to keep the connection from timing out.
+        if err != nil {
+            fmt.Println(err)
+            os.Exit(1) // Disconnected -- just restart the process. 
         }
     }
 }
 
 func main() {
-    connection, err := redis.DialURL(os.Getenv("REDIS_URL"))
-    rConn := &connection
+    rConn, err := redis.DialURL(os.Getenv("REDIS_URL"))
     if err != nil {
         fmt.Println("$$$ could not connect to redis")
         os.Exit(1)
     }
-    defer (*rConn).Close()
+    defer rConn.Close()
     fmt.Println("$$$ successfully connected to redis:", os.Getenv("REDIS_URL"))
 
     postgres, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
@@ -54,7 +44,7 @@ func main() {
     fmt.Println("$$$ successfully connected to postgres:", os.Getenv("DATABASE_URL"))
 
     handler := getWriter(rConn, ttl)
-    refreshConnection := getRefreshConnection(rConn)
+    refreshConnection := getKeepAlive(rConn)
 
     LongPoll(postgres, handler, refreshConnection)
 
