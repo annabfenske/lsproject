@@ -4,6 +4,7 @@ from .models import lostNYUID
 from django.http import JsonResponse, HttpResponse
 from django.core.cache import cache
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 
 from .forms import UserForm
 
@@ -23,7 +24,7 @@ def reportLost(request):
         form = UserForm(request.POST)
         if form.is_valid():
             ID = form.save(commit=False)
-            ID.time_lost = datetime.now()
+            ID.time_lost = datetime.timezone.now()
             ID.save()
     form = UserForm()
     args = {}
