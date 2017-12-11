@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import lostNYUID
 from django.http import JsonResponse, HttpResponse
 from django.core.cache import cache
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import UserForm
 
@@ -16,6 +17,7 @@ def swipe(request, netID):
         return JsonResponse({'lost':True})
     return JsonResponse({'lost':False})
 
+@csrf_exempt
 def reportLost(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
