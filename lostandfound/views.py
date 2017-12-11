@@ -2,17 +2,11 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import lostNYUID
 from django.http import JsonResponse, HttpResponse
-from django_redis import get_redis_connection
 from django.core.cache import cache
 
 from .forms import UserForm
 
 from datetime import datetime
-import time
-import uuid
-import json
-
-redis = get_redis_connection('default')
 
 def index(request):
   return JsonResponse({'placeholder':True})

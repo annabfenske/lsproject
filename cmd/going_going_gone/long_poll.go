@@ -13,6 +13,7 @@ const pollInterval = 10
 func LongPoll(database *sql.DB, handler func(string)) {
     lastCheck := time.Now()
     for {
+
         queryStart := lastCheck.Add(time.Duration((-pollInterval * time.Second).Seconds()))
         timeLost := queryStart.Format("2006-01-02 15:04:05-07")
         lastCheck = time.Now()
@@ -29,6 +30,7 @@ func LongPoll(database *sql.DB, handler func(string)) {
           if err != nil {
             fmt.Println("$$$ could not scan rows")
           } else {
+            fmt.Println(id)
             handler(id)
           }
         }
