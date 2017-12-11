@@ -7,7 +7,7 @@ import (
 
 func SetID(connection redis.Conn, id string, ttl float64) {
     idkey := ":1:" + id
-    reply, err := connection.Do("SETEX", idkey, ttl, 1)
+    _, err := connection.Do("SETEX", idkey, ttl, 1)
     if err != nil {
         fmt.Println(err)
     }
