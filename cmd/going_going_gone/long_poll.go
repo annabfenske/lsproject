@@ -11,7 +11,7 @@ import (
 const pollInterval = 10
 
 func GetIDs(database *sql.DB, timeLost string) (*sql.Rows, error) {
-  rows, error := database.Query("SELECT net_id lostandfound_lostnyuid FROM WHERE time_lost>$1", timeLost)
+  rows, error := database.Query("SELECT net_id FROM lostandfound_lostnyuid WHERE time_lost>$1", timeLost)
   if error != nil {
       fmt.Println("$$$ could not select rows")
       fmt.Println(error)
