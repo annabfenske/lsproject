@@ -10,8 +10,8 @@ import (
 
 const pollInterval = 10
 
-func GetIDs(database *sql.DB, tableName string, timeLost string) (*sql.Rows, error) {
-  rows, error := database.Query("SELECT net_id FROM  WHERE time_lost>$1", timeLost)
+func GetIDs(database *sql.DB, timeLost string) (*sql.Rows, error) {
+  rows, error := database.Query("SELECT net_id lostandfound_lostnyuid FROM WHERE time_lost>$1", timeLost)
   if error != nil {
       fmt.Println("$$$ could not select rows")
       fmt.Println(error)
@@ -26,7 +26,7 @@ func LongPoll(database *sql.DB, handler func(string), preset func()) {
         queryStart := lastCheck.Add(time.Duration((-pollInterval * time.Second).Seconds()))
         timeLost := queryStart.Format("2006-01-02 15:04:05-07")
         lastCheck = time.Now()
-        rows, error := GetIDs(database, "lostandfound_lostnyuid", timeLost)
+        rows, error := GetIDs(database, timeLost)
 
         preset()
         for rows.Next() {
