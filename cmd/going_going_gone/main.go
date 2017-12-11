@@ -18,9 +18,19 @@ func getWriter(rConn *redis.Conn, ttl float64) func(id string) {
 
 func getRefreshConnection(rConn *redis.Conn) func() {
     return func() {
-        _, err := (*rConn).Do("SET", "CHECK")
-        if err != nil {
-            *rConn, err = redis.DialURL(os.Getenv("REDIS_URL"))
+        if rConn != nil {
+            _, err := (*rConn).Do("SET", "CHECK")
+            if err != nil {
+                *rConn, err = redis.DialURL(os.Getenv("REDIS_URL"))
+            }
+        } else {
+            connection, err := redis.DialURL(os.Getenv("REDIS_URL"))
+            if err != nil {
+                fmt.Println("$$$ could not connect to redis")
+                fmt.Println(err)
+                os.Exit(1)
+            }
+            *rConn = connection
         }
     }
 }
