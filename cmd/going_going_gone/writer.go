@@ -10,6 +10,7 @@ func SetID(connection redis.Conn, id string, ttl float64) {
     _, err := connection.Do("SETEX", idkey, ttl, 1)
     if err != nil {
         fmt.Println(err)
+        fmt.Println(connection.Err())
     }
 }
 
