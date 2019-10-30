@@ -1,6 +1,3 @@
-### Deployed app url
-[large-scale-project.herokuapp.com](large-scale-project.herokuapp.com)
-
 ### Redis delay
 Note that there is a <10 second delay between when an id is reported lost and when that change is reflected in the client.
 
